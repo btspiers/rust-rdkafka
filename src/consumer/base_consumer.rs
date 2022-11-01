@@ -291,6 +291,34 @@ where
         Ok(())
     }
 
+    fn incremental_assign(&self, partitions: &TopicPartitionList) -> KafkaResult<()> {
+        let ret_code = unsafe {
+            rdsys::rd_kafka_error_code(rdsys::rd_kafka_incremental_assign(
+                self.client.native_ptr(),
+                partitions.ptr(),
+            ))
+        };
+        if ret_code.is_error() {
+            let error = unsafe { cstr_to_owned(rdsys::rd_kafka_err2str(ret_code)) };
+            return Err(KafkaError::Subscription(error));
+        };
+        Ok(())
+    }
+
+    fn incremental_unassign(&self, partitions: &TopicPartitionList) -> KafkaResult<()> {
+        let ret_code = unsafe {
+            rdsys::rd_kafka_error_code(rdsys::rd_kafka_incremental_unassign(
+                self.client.native_ptr(),
+                partitions.ptr(),
+            ))
+        };
+        if ret_code.is_error() {
+            let error = unsafe { cstr_to_owned(rdsys::rd_kafka_err2str(ret_code)) };
+            return Err(KafkaError::Subscription(error));
+        };
+        Ok(())
+    }
+
     fn seek<T: Into<Timeout>>(
         &self,
         topic: &str,

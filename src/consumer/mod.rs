@@ -237,6 +237,12 @@ where
     /// automatic consumer rebalance won't be activated.
     fn assign(&self, assignment: &TopicPartitionList) -> KafkaResult<()>;
 
+    /// Incrementally add partitions to the current assignment
+    fn incremental_assign(&self, partitions: &TopicPartitionList) -> KafkaResult<()>;
+
+    /// Incrementally remove partitions from the current assignment
+    fn incremental_unassign(&self, partitions: &TopicPartitionList) -> KafkaResult<()>;
+
     /// Seeks to `offset` for the specified `topic` and `partition`. After a
     /// successful call to `seek`, the next poll of the consumer will return the
     /// message with `offset`.

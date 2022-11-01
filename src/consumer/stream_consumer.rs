@@ -384,6 +384,14 @@ where
         self.base.assign(assignment)
     }
 
+    fn incremental_assign(&self, partitions: &TopicPartitionList) -> KafkaResult<()> {
+        self.base.incremental_assign(partitions)
+    }
+
+    fn incremental_unassign(&self, partitions: &TopicPartitionList) -> KafkaResult<()> {
+        self.base.incremental_unassign(partitions)
+    }
+
     fn seek<T: Into<Timeout>>(
         &self,
         topic: &str,
